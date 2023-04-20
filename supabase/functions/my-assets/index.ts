@@ -20,11 +20,11 @@ async function createAsset(supabaseClient: SupabaseClient, assetData: AssetData)
   const asset: Asset = {
     ...assetData,
     id: self.crypto.randomUUID(),
-    user_id: self.crypto.randomUUID(), // TODO: get authenticated userId
+    user_id: '', // TODO: get authenticated userId
     is_favourite: false
   }
 
-  const { error } = await supabaseClient.from('assets').insert(task)
+  const { error } = await supabaseClient.from('assets').insert(asset)
   if (error) throw error
 
   return new Response(JSON.stringify({ asset }), {
@@ -43,11 +43,21 @@ async function getAsset(supabaseClient: SupabaseClient, id: string) {
   })
 }
 
-async function getAllAssets(supabaseClient: SupabaseClient, id: string) {
+async function getAllAssets(supabaseClient: SupabaseClient) {
   const { data: assets, error } = await supabaseClient.from('assets').select('*')
   if (error) throw error
 
   return new Response(JSON.stringify({ assets }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  })
+}
+
+async function deleteAsset(supabaseClient: SupabaseClient, id: string) {
+  const { error } = await supabaseClient.from('assets').delete().eq('id', id)
+  if (error) throw error
+
+  return new Response(JSON.stringify({}), {
     headers: { ...corsHeaders, 'Content-Type': 'application/json' },
     status: 200,
   })
@@ -80,6 +90,8 @@ serve(async (req: Request) => {
     switch (true) {
       case id && method === 'GET':
         return getAsset(supabaseClient, id as string)
+      case id && method === 'DELETE':
+        return deleteAsset(supabaseClient, id as string)
       case method === 'POST':
         return createAsset(supabaseClient, asset)
       case method === 'GET':
@@ -91,14 +103,6 @@ serve(async (req: Request) => {
     // const {
     //   data: { user },
     // } = await supabaseClient.auth.getUser()
-
-    // const { data, error } = await supabase.from('assets').select('*')
-    // if (error) throw error
-
-    // return new Response(JSON.stringify({ data }), {
-    //   headers: {...corsHeaders, 'Content-Type': 'application/json' },
-    //   status: 200,
-    // })
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
       headers: {...corsHeaders, 'Content-Type': 'application/json' },
