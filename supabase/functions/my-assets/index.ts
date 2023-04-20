@@ -3,9 +3,30 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from "../_shared/cors.ts";
 
 
+async function getAsset(supabaseClient: SupabaseClient, id: string) {
+  const { data: asset, error } = await supabaseClient.from('assets').select('*').eq('id', id)
+  if (error) throw error
+
+  return new Response(JSON.stringify({ asset }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  })
+}
+
+async function getAllAssets(supabaseClient: SupabaseClient, id: string) {
+  const { data: assets, error } = await supabaseClient.from('assets').select('*')
+  if (error) throw error
+
+  return new Response(JSON.stringify({ assets }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  })
+}
+
 serve(async (req: Request) => {
-  // This is needed if you're planning to invoke your function from a browser.
-  if (req.method === 'OPTIONS') {
+  const { url, method } = req
+
+  if (method === 'OPTIONS') {
     return new Response('ok', { headers: corsHeaders })
   }
 
@@ -16,17 +37,36 @@ serve(async (req: Request) => {
         // { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
     )
 
+    const myAssetsPattern = new URLPattern({ pathname: '/my-assets/:id' })
+    const matchingPath = myAssetsPattern.exec(url)
+    const id = matchingPath ? matchingPath.pathname.groups.id : null
+
+    let task = null
+    if (method === 'POST' || method === 'PUT') {
+      const body = await req.json()
+      task = body.task
+    }
+
+    switch (true) {
+      case id && method === 'GET':
+        return getAsset(supabaseClient, id as string)
+      case method === 'GET':
+        return getAllAssets(supabaseClient)
+      default:
+        return getAllAssets(supabaseClient)
+    }
+
     // const {
     //   data: { user },
     // } = await supabaseClient.auth.getUser()
 
-    const { data, error } = await supabaseClient.from('assets').select('*')
-    if (error) throw error
+    // const { data, error } = await supabase.from('assets').select('*')
+    // if (error) throw error
 
-    return new Response(JSON.stringify({ data }), {
-      headers: {...corsHeaders, 'Content-Type': 'application/json' },
-      status: 200,
-    })
+    // return new Response(JSON.stringify({ data }), {
+    //   headers: {...corsHeaders, 'Content-Type': 'application/json' },
+    //   status: 200,
+    // })
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
       headers: {...corsHeaders, 'Content-Type': 'application/json' },
