@@ -20,10 +20,14 @@ interface Asset extends AssetUpdates {
 }
 
 async function createAsset(supabaseClient: SupabaseClient, assetData: AssetData) {
+  const {
+    data: { user },
+  } = await supabaseClient.auth.getUser()
+
   const asset: Asset = {
     ...assetData,
     id: self.crypto.randomUUID(),
-    user_id: '', // TODO: get authenticated userId
+    user_id: user.id,
     is_favourite: false
   }
 
@@ -87,7 +91,7 @@ serve(async (req: Request) => {
     const supabaseClient = createClient(
         Deno.env.get('SUPABASE_URL') ?? '',
         Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-        // { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
+        { global: { headers: { Authorization: req.headers.get('Authorization')! } } }
     )
 
     const myAssetsPattern = new URLPattern({ pathname: '/my-assets/:id' })
@@ -114,10 +118,6 @@ serve(async (req: Request) => {
       default:
         return getAllAssets(supabaseClient)
     }
-
-    // const {
-    //   data: { user },
-    // } = await supabaseClient.auth.getUser()
   } catch (error) {
     return new Response(JSON.stringify({ error: error.message }), {
       headers: {...corsHeaders, 'Content-Type': 'application/json' },
