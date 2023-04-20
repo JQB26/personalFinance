@@ -3,6 +3,36 @@ import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import { corsHeaders } from "../_shared/cors.ts";
 
 
+interface AssetData {
+  name: string,
+  ticker: string,
+  type: string,
+  shares: number,
+}
+
+interface Asset extends AssetData {
+  id: string,
+  user_id: string,
+  is_favourite: boolean,
+}
+
+async function createAsset(supabaseClient: SupabaseClient, assetData: AssetData) {
+  const asset: Asset = {
+    ...assetData,
+    id: self.crypto.randomUUID(),
+    user_id: self.crypto.randomUUID(), // TODO: get authenticated userId
+    is_favourite: false
+  }
+
+  const { error } = await supabaseClient.from('assets').insert(task)
+  if (error) throw error
+
+  return new Response(JSON.stringify({ asset }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  })
+}
+
 async function getAsset(supabaseClient: SupabaseClient, id: string) {
   const { data: asset, error } = await supabaseClient.from('assets').select('*').eq('id', id)
   if (error) throw error
@@ -41,15 +71,17 @@ serve(async (req: Request) => {
     const matchingPath = myAssetsPattern.exec(url)
     const id = matchingPath ? matchingPath.pathname.groups.id : null
 
-    let task = null
+    let asset = null
     if (method === 'POST' || method === 'PUT') {
       const body = await req.json()
-      task = body.task
+      asset = body.asset
     }
 
     switch (true) {
       case id && method === 'GET':
         return getAsset(supabaseClient, id as string)
+      case method === 'POST':
+        return createAsset(supabaseClient, asset)
       case method === 'GET':
         return getAllAssets(supabaseClient)
       default:
