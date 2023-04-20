@@ -10,10 +10,13 @@ interface AssetData {
   shares: number,
 }
 
-interface Asset extends AssetData {
+interface AssetUpdates extends AssetData {
+  is_favourite: boolean,
+}
+
+interface Asset extends AssetUpdates {
   id: string,
   user_id: string,
-  is_favourite: boolean,
 }
 
 async function createAsset(supabaseClient: SupabaseClient, assetData: AssetData) {
@@ -63,6 +66,16 @@ async function deleteAsset(supabaseClient: SupabaseClient, id: string) {
   })
 }
 
+async function updateAsset(supabaseClient: SupabaseClient, id: string, assetUpdates: AssetUpdates) {
+  const { error } = await supabaseClient.from('assets').update(assetUpdates).eq('id', id)
+  if (error) throw error
+
+  return new Response(JSON.stringify({}), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    status: 200,
+  })
+}
+
 serve(async (req: Request) => {
   const { url, method } = req
 
@@ -90,6 +103,8 @@ serve(async (req: Request) => {
     switch (true) {
       case id && method === 'GET':
         return getAsset(supabaseClient, id as string)
+      case id && method === 'PUT':
+        return updateAsset(supabaseClient, id as string, asset)
       case id && method === 'DELETE':
         return deleteAsset(supabaseClient, id as string)
       case method === 'POST':
