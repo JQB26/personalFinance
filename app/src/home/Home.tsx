@@ -2,10 +2,11 @@ import React, {useEffect, useState} from "react";
 import {supabase} from "../App";
 import {Funnel, FunnelChart, LabelList, Pie, PieChart, Sankey, Tooltip, Treemap} from "recharts";
 import { useQuery } from "react-query";
-import {Avatar} from "@mui/material";
-import Favourites from "./favourites/Favourites";
+import {Avatar, CircularProgress} from "@mui/material";
+import Favourites from "./leftSide/Favourites";
 import {Colors} from "../shared/colors";
 import Content from "./content/Content";
+import LeftSide from "./leftSide/LeftSide";
 
 export default function Home() {
     const { isLoading, data, isError, error, isFetching, refetch } = useQuery(
@@ -40,12 +41,16 @@ export default function Home() {
     }
 
     if (isLoading) {
-        return <h2>Loading...</h2>
+        return (
+            <div style={{display: 'flex', flexWrap: 'wrap', backgroundColor: Colors.BG, margin: 0, padding: 0, height: '100vh', width: '100vw', alignItems: 'center', justifyContent: 'center'}}>
+                <CircularProgress style={{color: Colors.Accent}} size={100} />
+            </div>
+        )
     }
 
     return (
         <div style={{display: 'flex', flexWrap: 'wrap', backgroundColor: Colors.BG, margin: 0, padding: 0, height: '100vh', width: '100vw'}}>
-            <Favourites />
+            <LeftSide />
             <Content />
             {/*<button onClick={addData}>add asset</button>*/}
             {/*<button onClick={getData}>get assets</button>*/}
