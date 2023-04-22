@@ -2,7 +2,7 @@ import React from "react";
 import {Colors} from "../../../shared/colors";
 import Profile from "./Profile";
 
-export default function Header() {
+export default function Header({activePage}) {
     return(
         <div style={{
             flex: '0 0 14vh',
@@ -25,7 +25,7 @@ export default function Header() {
                 <div style={{
                     color: Colors.Light,
                     fontSize: 20,
-                }}>Dashboards</div>
+                }}>{activePage === 'dashboards' ? 'Dashboards' : 'Your all assets' }</div>
             </div>
 
             <Profile />

@@ -1,8 +1,8 @@
 import {Colors} from "../../shared/colors";
-import Navigation from "./Navigation";
+import Navigation from "./navigation/Navigation";
 import Favourites from "./Favourites";
 
-export default function LeftSide() {
+export default function LeftSide({activePage, setActivePage}) {
     return(
         <div style={{
             flex: '1 0 15%',
@@ -13,7 +13,7 @@ export default function LeftSide() {
             borderRight: 'solid',
             borderRightColor: Colors.Secondary
         }}>
-            <Navigation />
+            <Navigation activePage={activePage} setActivePage={setActivePage} />
             <Favourites />
         </div>
     )

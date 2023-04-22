@@ -14,13 +14,15 @@ export default function Home() {
         getData
     )
 
+    const [activePage, setActivePage] = useState('dashboards')
+
     const [userInitials, setUserInitials] = useState('JS')
 
     async function getData() {
         const { data, error } = await supabase.functions.invoke("my-assets", {
             method: "GET"
         })
-        console.log(data)
+        console.log(data.assets)
         return data.assets;
     }
 
@@ -50,8 +52,8 @@ export default function Home() {
 
     return (
         <div style={{display: 'flex', flexWrap: 'wrap', backgroundColor: Colors.BG, margin: 0, padding: 0, height: '100vh', width: '100vw'}}>
-            <LeftSide />
-            <Content />
+            <LeftSide activePage={activePage} setActivePage={setActivePage}/>
+            <Content activePage={activePage} data={data} refetch={refetch}/>
             {/*<button onClick={addData}>add asset</button>*/}
             {/*<button onClick={getData}>get assets</button>*/}
             {/*<button onClick={() => {supabase.auth.signOut()}}>logout</button>*/}
