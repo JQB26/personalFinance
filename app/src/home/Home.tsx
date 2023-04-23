@@ -14,7 +14,7 @@ export default function Home() {
         getData
     )
 
-    const [activePage, setActivePage] = useState('dashboards')
+    const [activePage, setActivePage] = useState('assets')
 
     const [userInitials, setUserInitials] = useState('JS')
 

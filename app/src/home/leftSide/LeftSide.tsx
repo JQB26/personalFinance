@@ -4,7 +4,7 @@ import Favourites from "./Favourites";
 
 export default function LeftSide({activePage, setActivePage}) {
     return(
-        <div style={{
+        <div id={'leftSide'} style={{
             flex: '1 0 15%',
             // backgroundColor: 'green',
             display: 'flex',

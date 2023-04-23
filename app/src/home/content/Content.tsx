@@ -8,7 +8,7 @@ export default function Content({activePage, data, refetch}) {
         <div style={{
             flex: '1 0 85%',
             display: 'flex',
-            flexDirection: 'column',
+            flexDirection: 'column'
         }}>
             <Header activePage={activePage} />
             {activePage === 'dashboards' ? <Dashboards /> : <Assets data={data} refetch={refetch} />}

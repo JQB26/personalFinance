@@ -4,7 +4,7 @@ import Profile from "./Profile";
 
 export default function Header({activePage}) {
     return(
-        <div style={{
+        <div id={'header'} style={{
             flex: '0 0 14vh',
             // backgroundColor: 'red',
             display: 'flex',

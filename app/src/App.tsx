@@ -7,8 +7,8 @@ import Home from "./home/Home";
 import {QueryClient, QueryClientProvider} from "react-query";
 import {Colors} from "./shared/colors";
 
-const supabaseUrl = ''
-const supabaseKey = ''
+const supabaseUrl = process.env.REACT_APP_SUPABASE_URL //  'https://hnttufbkxsdmupulzxwp.supabase.co'
+const supabaseKey = process.env.REACT_APP_SUPABASE_KEY // 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImhudHR1ZmJreHNkbXVwdWx6eHdwIiwicm9sZSI6ImFub24iLCJpYXQiOjE2ODEzMjY2MzEsImV4cCI6MTk5NjkwMjYzMX0.T5tKHHY6sapvnqgXITPTaMmHN0ZnyzWY9qc0xbNorUg'
 
 export const supabase = createClient(supabaseUrl, supabaseKey)
 

@@ -25,7 +25,7 @@ export default function Navigation({activePage, setActivePage}) {
                 <MdDashboard color={Colors.Accent} />
                 <div style={{color: Colors.Accent, marginLeft: 10}}>Dashboards</div>
             </div>
-            <div id={'assets'} style={{
+            <div className={'nav-item'} id={'assets'} style={{
                 display: 'flex',
                 flexDirection: 'row',
                 backgroundColor: activePage === 'assets' ? '#161920' : Colors.BG,
