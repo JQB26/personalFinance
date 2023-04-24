@@ -26,24 +26,24 @@ export default function Favourites({favouritesData}) {
             }}>
                 Favourites
             </div>
-            <div style={{
+            {groups['Cash']?.length && <div style={{
                 fontSize: 18,
                 color: Colors.Light,
                 marginBottom: 10
             }}>
                 Cash
-            </div>
+            </div>}
             {/*TODO: fix it*/}
             {groups['Cash'] && groups['Cash'].map((fav) => (
                 <FavouriteComponent favouriteItem={fav} />
             ))}
-            <div style={{
+            {groups['Bank']?.length && <div style={{
                 fontSize: 18,
                 color: Colors.Light,
                 marginBottom: 10
             }}>
                 Bank
-            </div>
+            </div>}
             {groups['Bank'] && groups['Bank'].map((fav) => (
                 <FavouriteComponent favouriteItem={fav} />
             ))}
