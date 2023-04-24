@@ -3,7 +3,7 @@ import {supabase} from "../App";
 import {Funnel, FunnelChart, LabelList, Pie, PieChart, Sankey, Tooltip, Treemap} from "recharts";
 import { useQuery } from "react-query";
 import {Avatar, CircularProgress} from "@mui/material";
-import Favourites from "./leftSide/Favourites";
+import Favourites from "./leftSide/favurites/Favourites";
 import {Colors} from "../shared/colors";
 import Content from "./content/Content";
 import LeftSide from "./leftSide/LeftSide";
@@ -14,6 +14,8 @@ export default function Home() {
         getData
     )
 
+    const [favourites, setFavourites] = useState([])
+
     const [activePage, setActivePage] = useState('dashboards')
 
     async function getData() {
@@ -21,6 +23,10 @@ export default function Home() {
             method: "GET"
         })
         console.log(data.assets)
+        const assets = data.assets
+        setFavourites(assets.filter((asset) =>
+            asset.is_favourite
+        ))
         return data.assets;
     }
 
@@ -50,7 +56,7 @@ export default function Home() {
 
     return (
         <div style={{display: 'flex', flexWrap: 'wrap', backgroundColor: Colors.BG, margin: 0, padding: 0, height: '100vh', width: '100vw'}}>
-            <LeftSide activePage={activePage} setActivePage={setActivePage}/>
+            <LeftSide activePage={activePage} setActivePage={setActivePage} favouritesData={favourites}/>
             <Content activePage={activePage} data={data} refetch={refetch}/>
         </div>
     );

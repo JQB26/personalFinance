@@ -4,6 +4,7 @@ import {Box, MenuItem, TextField} from "@mui/material";
 import {Colors} from "../../../shared/colors";
 import {AiOutlinePlus} from "react-icons/ai";
 import {supabase} from "../../../App";
+import {FaTrash} from "react-icons/fa";
 
 export default function EditAssetPopOver({refetch, isActive, setIsActive, id, previousName, previousType, previousTicker, previousShares}) {
     // TODO: export somewhere else
@@ -183,7 +184,7 @@ export default function EditAssetPopOver({refetch, isActive, setIsActive, id, pr
                         await deleteAsset(id)
                         deactivate()
                     }}>
-                        <AiOutlinePlus size={16} style={{}}/>
+                        <FaTrash size={14} style={{}}/>
                         <div style={{fontSize: 16}}>Delete asset</div>
                     </div>
 

@@ -112,19 +112,19 @@ export default function Assets({data, refetch}) {
                     </div>
                 </div>
                 <TableContainer component={Paper}>
-                    <Table sx={{ minWidth: 650 }} aria-label="simple table">
+                    <Table sx={{ minWidth: 650 }} aria-label="simple table" stickyHeader={true}>
                         <TableHead>
                             <TableRow>
-                                <TableCell>Name</TableCell>
-                                <TableCell>Type</TableCell>
-                                <TableCell>Ticker</TableCell>
-                                <TableCell>Shares</TableCell>
-                                <TableCell>Current Price</TableCell>
-                                <TableCell>Total Value USD</TableCell>
-                                <TableCell>Total Value PLN</TableCell>
-                                <TableCell>% of Port</TableCell>
-                                <TableCell>Add to favourites</TableCell>
-                                <TableCell>Edit</TableCell>
+                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Name</TableCell>
+                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Type</TableCell>
+                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Ticker</TableCell>
+                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Shares</TableCell>
+                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Current Price</TableCell>
+                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Total Value USD</TableCell>
+                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Total Value PLN</TableCell>
+                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>% of Port</TableCell>
+                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Add to favourites</TableCell>
+                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Edit</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
@@ -132,21 +132,22 @@ export default function Assets({data, refetch}) {
                                 <TableRow
                                     key={asset.id}
                                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    style={{backgroundColor: Colors.BG}}
                                 >
-                                    <TableCell component="th" scope="row">
+                                    <TableCell component="th" scope="row" style={{color: Colors.Light}}>
                                         {asset.name}
                                     </TableCell>
-                                    <TableCell>{asset.type}</TableCell>
-                                    <TableCell>{asset.ticker}</TableCell>
-                                    <TableCell>{asset.shares}</TableCell>
-                                    <TableCell>0.52$</TableCell>
-                                    <TableCell>{asset.shares * 0.52}$</TableCell>
-                                    <TableCell>{asset.shares}PLN</TableCell>
-                                    <TableCell>30%</TableCell>
+                                    <TableCell style={{color: Colors.Light}}>{asset.type}</TableCell>
+                                    <TableCell style={{color: Colors.Light}}>{asset.ticker}</TableCell>
+                                    <TableCell style={{color: Colors.Light}}>{asset.shares}</TableCell>
+                                    <TableCell style={{color: Colors.Light}}>0.52 $</TableCell>
+                                    <TableCell style={{color: Colors.Light}}>{(asset.shares * 0.52).toFixed(2)} $</TableCell>
+                                    <TableCell style={{color: Colors.Light}}>{asset.shares} PLN</TableCell>
+                                    <TableCell style={{color: Colors.Light}}>30%</TableCell>
                                     <TableCell>{asset.is_favourite
                                         ? <AiFillStar size={24} style={{cursor: 'pointer'}} onClick={() => removeFromFavourites(asset.id)} color={'gold'} />
-                                        : <AiOutlineStar size={24} style={{cursor: 'pointer'}} onClick={() => addToFavourites(asset.id)} />}</TableCell>
-                                    <TableCell><AiFillEdit size={24} style={{cursor: 'pointer'}} onClick={() => editAsset(
+                                        : <AiOutlineStar size={24} style={{cursor: 'pointer'}} color={Colors.Light} onClick={() => addToFavourites(asset.id)} />}</TableCell>
+                                    <TableCell><AiFillEdit size={24} style={{cursor: 'pointer'}} color={Colors.Light} onClick={() => editAsset(
                                         asset.id, asset.name, asset.type, asset.ticker, asset.shares
                                     )} /></TableCell>
                                 </TableRow>
