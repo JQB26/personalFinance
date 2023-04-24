@@ -1,15 +1,38 @@
-import React from "react";
+import React, {useState} from "react";
 import { IoClose } from "react-icons/io5";
 import {Box, MenuItem, TextField} from "@mui/material";
 import {Colors} from "../../../shared/colors";
 import {AiOutlinePlus} from "react-icons/ai";
+import {supabase} from "../../../App";
 
-export default function EditAssetPopOver({isActive, setIsActive, id, name, type, ticker, shares}) {
+export default function EditAssetPopOver({refetch, isActive, setIsActive, id, previousName, previousType, previousTicker, previousShares}) {
     // TODO: export somewhere else
     const Types = [
         'Cash',
         'Bank'
     ]
+
+    const [name, setName] = useState(previousName)
+    const [type, setType] = useState(previousType)
+    const [ticker, setTicker] = useState(previousTicker)
+    const [shares, setShares] = useState(previousShares)
+
+    async function updateAsset(id, assetUpdates) {
+        await supabase.functions.invoke(`my-assets/${id}`, {
+            method: "PUT",
+            body: {
+                asset: assetUpdates
+            }
+        })
+        await refetch()
+    }
+
+    async function deleteAsset(id) {
+        await supabase.functions.invoke(`my-assets/${id}`, {
+            method: "DELETE"
+        })
+        await refetch()
+    }
 
     const deactivate = () => {
         document.getElementById('assetsPage').style.filter = 'blur(0px)'
@@ -73,7 +96,8 @@ export default function EditAssetPopOver({isActive, setIsActive, id, name, type,
                         required
                         id="outlined-required"
                         label="Name"
-                        defaultValue={name}
+                        value={name}
+                        onChange={e => setName(e.target.value)}
                         focused
                         InputProps={{
                             style: {
@@ -86,7 +110,8 @@ export default function EditAssetPopOver({isActive, setIsActive, id, name, type,
                         required
                         id="outlined-required"
                         label="Type"
-                        defaultValue={type}
+                        value={type}
+                        onChange={e => setType(e.target.value)}
                         focused
                         select
                         InputProps={{
@@ -105,7 +130,8 @@ export default function EditAssetPopOver({isActive, setIsActive, id, name, type,
                         required
                         id="outlined-required"
                         label="Ticker Name"
-                        defaultValue={ticker}
+                        value={ticker}
+                        onChange={e => setTicker(e.target.value)}
                         focused
                         InputProps={{
                             style: {
@@ -117,7 +143,8 @@ export default function EditAssetPopOver({isActive, setIsActive, id, name, type,
                         required
                         id="outlined-required"
                         type="number"
-                        defaultValue={shares}
+                        value={shares}
+                        onChange={e => setShares(parseFloat(e.target.value))}
                         InputLabelProps={{
                             shrink: true,
                         }}
@@ -152,7 +179,8 @@ export default function EditAssetPopOver({isActive, setIsActive, id, name, type,
                         paddingBottom: 13,
                         paddingTop: 13,
                         cursor: 'pointer'
-                    }} onClick={() => {
+                    }} onClick={async () => {
+                        await deleteAsset(id)
                         deactivate()
                     }}>
                         <AiOutlinePlus size={16} style={{}}/>
@@ -172,7 +200,14 @@ export default function EditAssetPopOver({isActive, setIsActive, id, name, type,
                         paddingBottom: 13,
                         paddingTop: 13,
                         cursor: 'pointer'
-                    }} onClick={() => {
+                    }} onClick={async () => {
+                        const asset = {
+                            name: name,
+                            type: type,
+                            ticker: ticker,
+                            shares: shares
+                        }
+                        await updateAsset(id, asset)
                         deactivate()
                     }}>
                         <AiOutlinePlus size={16} style={{}}/>

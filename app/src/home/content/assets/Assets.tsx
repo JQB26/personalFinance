@@ -20,6 +20,10 @@ export default function Assets({data, refetch}) {
     const [editValuesHook, setEditValuesHook] = useState(editValues)
 
     if (addAssetPopOverIsActive || editAssetPopOverIsActive) {
+        document.getElementById('assetsPage').style.transition = 'all 0.2s ease'
+        document.getElementById('header').style.transition = 'all 0.2s ease'
+        document.getElementById('leftSide').style.transition = 'all 0.2s ease'
+
         document.getElementById('assetsPage').style.filter = 'blur(5px)'
         document.getElementById('header').style.filter = 'blur(5px)'
         document.getElementById('leftSide').style.filter = 'blur(5px)'
@@ -69,13 +73,14 @@ export default function Assets({data, refetch}) {
         <div>
             {addAssetPopOverIsActive && <AddAssetPopOver refetch={refetch} isActive={addAssetPopOverIsActive} setIsActive={setAddAssetPopOverIsActive} />}
             {editAssetPopOverIsActive && <EditAssetPopOver
+                refetch={refetch}
                 isActive={editAssetPopOverIsActive}
                 setIsActive={setEditAssetPopOverIsActive}
                 id={editValuesHook.id}
-                name={editValuesHook.name}
-                type={editValuesHook.type}
-                ticker={editValuesHook.ticker}
-                shares={editValuesHook.shares}
+                previousName={editValuesHook.name}
+                previousType={editValuesHook.type}
+                previousTicker={editValuesHook.ticker}
+                previousShares={editValuesHook.shares}
             />}
             <div id={'assetsPage'} style={{
                 flex: '1 0 auto',

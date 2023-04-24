@@ -14,9 +14,7 @@ export default function Home() {
         getData
     )
 
-    const [activePage, setActivePage] = useState('assets')
-
-    const [userInitials, setUserInitials] = useState('JS')
+    const [activePage, setActivePage] = useState('dashboards')
 
     async function getData() {
         const { data, error } = await supabase.functions.invoke("my-assets", {
@@ -54,21 +52,6 @@ export default function Home() {
         <div style={{display: 'flex', flexWrap: 'wrap', backgroundColor: Colors.BG, margin: 0, padding: 0, height: '100vh', width: '100vw'}}>
             <LeftSide activePage={activePage} setActivePage={setActivePage}/>
             <Content activePage={activePage} data={data} refetch={refetch}/>
-            {/*<button onClick={addData}>add asset</button>*/}
-            {/*<button onClick={getData}>get assets</button>*/}
-            {/*<button onClick={() => {supabase.auth.signOut()}}>logout</button>*/}
-            {/*<Treemap*/}
-            {/*    width={730}*/}
-            {/*    height={250}*/}
-            {/*    data={data}*/}
-            {/*    dataKey='shares'*/}
-            {/*    aspectRatio={4 / 3}*/}
-            {/*    stroke='black'*/}
-            {/*    fill='#3fcf8e'*/}
-            {/*/>*/}
-            {/*<PieChart width={730} height={250}>*/}
-            {/*    <Pie data={data} dataKey="shares" nameKey="name" cx="50%" cy="50%" fill="#3fcf8e" label />*/}
-            {/*</PieChart>*/}
         </div>
     );
 }

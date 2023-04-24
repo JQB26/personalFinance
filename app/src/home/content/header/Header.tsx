@@ -25,7 +25,7 @@ export default function Header({activePage}) {
                 <div style={{
                     color: Colors.Light,
                     fontSize: 20,
-                }}>{activePage === 'dashboards' ? 'Dashboards' : 'Your all assets' }</div>
+                }}>{activePage === 'dashboards' ? 'Dashboards' : 'All assets' }</div>
             </div>
 
             <Profile />
