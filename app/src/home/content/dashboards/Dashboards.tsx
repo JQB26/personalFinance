@@ -68,24 +68,6 @@ export default function Dashboards({data}) {
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 <Grid item xs={6}>
                     <Item>
-                        <ResponsiveContainer width="100%" height="100%">
-                            <PieChart width={500} height={500}>
-                                <Pie
-                                    dataKey="shares"
-                                    data={data}
-                                    cx="50%"
-                                    cy="50%"
-                                    outerRadius={80}
-                                    fill="#8884d8"
-                                    label
-                                />
-                                <Tooltip />
-                            </PieChart>
-                        </ResponsiveContainer>
-                    </Item>
-                </Grid>
-                <Grid item xs={6}>
-                    <Item>
                         <ResponsiveContainer width="90%" height="90%">
                             <Treemap width={0} height={0} data={data} dataKey="shares" stroke="#fff" fill="#8884d8">
                                 <Tooltip />
@@ -195,6 +177,24 @@ export default function Dashboards({data}) {
                                 <Legend />
                                 <Bar dataKey="shares" fill="#8884d8" />
                             </BarChart>
+                        </ResponsiveContainer>
+                    </Item>
+                </Grid>
+                <Grid item xs={6}>
+                    <Item>
+                        <ResponsiveContainer width="100%" height="100%">
+                            <PieChart width={500} height={500}>
+                                <Pie
+                                    dataKey="shares"
+                                    data={data}
+                                    cx="50%"
+                                    cy="50%"
+                                    outerRadius={80}
+                                    fill="#8884d8"
+                                    label
+                                />
+                                <Tooltip />
+                            </PieChart>
                         </ResponsiveContainer>
                     </Item>
                 </Grid>

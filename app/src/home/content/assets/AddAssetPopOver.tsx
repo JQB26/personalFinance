@@ -17,9 +17,34 @@ export default function AddAssetPopOver({refetch, isActive, setIsActive}) {
     const [ticker, setTicker] = useState('')
     const [shares, setShares] = useState(0)
 
+    const [nameError, setNameError] = useState(false)
+    const [typeError, setTypeError] = useState(false)
+    const [tickerError, setTickerError] = useState(false)
+    const [sharesError, setSharesError] = useState(false)
+
     async function addAsset(asset) {
-        if (name === '' || type === '' || ticker === '' || shares === -1) {
-            return
+        if (name === '') {
+            setNameError(true)
+        } else {
+            setNameError(false)
+        }
+        if (type === '') {
+            setTypeError(true)
+        } else {
+            setTypeError(false)
+        }
+        if (ticker === '') {
+            setTickerError(true)
+        } else {
+            setTickerError(false)
+        }
+        if (isNaN(shares)) {
+            setSharesError(true)
+        } else {
+            setSharesError(false)
+        }
+        if (name === '' || type === '' || ticker === '' || isNaN(shares)) {
+            return false
         }
 
         await supabase.functions.invoke('my-assets', {
@@ -29,6 +54,7 @@ export default function AddAssetPopOver({refetch, isActive, setIsActive}) {
             }
         })
         await refetch()
+        return true
     }
 
     const deactivate = () => {
@@ -94,6 +120,7 @@ export default function AddAssetPopOver({refetch, isActive, setIsActive}) {
                         id="outlined-required"
                         label="Name"
                         value={name}
+                        error={nameError}
                         onChange={e => setName(e.target.value)}
                         focused
                         InputProps={{
@@ -108,6 +135,7 @@ export default function AddAssetPopOver({refetch, isActive, setIsActive}) {
                         id="outlined-required"
                         label="Type"
                         value={type}
+                        error={typeError}
                         onChange={e => setType(e.target.value)}
                         focused
                         select
@@ -128,6 +156,7 @@ export default function AddAssetPopOver({refetch, isActive, setIsActive}) {
                         id="outlined-required"
                         label="Ticker Name"
                         value={ticker}
+                        error={tickerError}
                         onChange={e => setTicker(e.target.value)}
                         focused
                         InputProps={{
@@ -141,6 +170,7 @@ export default function AddAssetPopOver({refetch, isActive, setIsActive}) {
                         id="outlined-required"
                         type="number"
                         value={shares}
+                        error={sharesError}
                         onChange={e => setShares(parseFloat(e.target.value))}
                         InputLabelProps={{
                             shrink: true,
@@ -178,8 +208,9 @@ export default function AddAssetPopOver({refetch, isActive, setIsActive}) {
                         ticker: ticker,
                         shares: shares
                     }
-                    await addAsset(asset)
-                    deactivate()
+                    if (await addAsset(asset)) {
+                        deactivate()
+                    }
                 }}>
                     <AiOutlinePlus size={16} style={{}}/>
                     <div style={{fontSize: 16}}>Add asset</div>

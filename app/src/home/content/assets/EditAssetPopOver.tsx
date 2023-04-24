@@ -18,7 +18,36 @@ export default function EditAssetPopOver({refetch, isActive, setIsActive, id, pr
     const [ticker, setTicker] = useState(previousTicker)
     const [shares, setShares] = useState(previousShares)
 
+    const [nameError, setNameError] = useState(false)
+    const [typeError, setTypeError] = useState(false)
+    const [tickerError, setTickerError] = useState(false)
+    const [sharesError, setSharesError] = useState(false)
+
     async function updateAsset(id, assetUpdates) {
+        if (name === '') {
+            setNameError(true)
+        } else {
+            setNameError(false)
+        }
+        if (type === '') {
+            setTypeError(true)
+        } else {
+            setTypeError(false)
+        }
+        if (ticker === '') {
+            setTickerError(true)
+        } else {
+            setTickerError(false)
+        }
+        if (isNaN(shares)) {
+            setSharesError(true)
+        } else {
+            setSharesError(false)
+        }
+        if (name === '' || type === '' || ticker === '' || isNaN(shares)) {
+            return false
+        }
+
         await supabase.functions.invoke(`my-assets/${id}`, {
             method: "PUT",
             body: {
@@ -26,6 +55,7 @@ export default function EditAssetPopOver({refetch, isActive, setIsActive, id, pr
             }
         })
         await refetch()
+        return true
     }
 
     async function deleteAsset(id) {
@@ -98,6 +128,7 @@ export default function EditAssetPopOver({refetch, isActive, setIsActive, id, pr
                         id="outlined-required"
                         label="Name"
                         value={name}
+                        error={nameError}
                         onChange={e => setName(e.target.value)}
                         focused
                         InputProps={{
@@ -112,6 +143,7 @@ export default function EditAssetPopOver({refetch, isActive, setIsActive, id, pr
                         id="outlined-required"
                         label="Type"
                         value={type}
+                        error={typeError}
                         onChange={e => setType(e.target.value)}
                         focused
                         select
@@ -132,6 +164,7 @@ export default function EditAssetPopOver({refetch, isActive, setIsActive, id, pr
                         id="outlined-required"
                         label="Ticker Name"
                         value={ticker}
+                        error={tickerError}
                         onChange={e => setTicker(e.target.value)}
                         focused
                         InputProps={{
@@ -145,6 +178,7 @@ export default function EditAssetPopOver({refetch, isActive, setIsActive, id, pr
                         id="outlined-required"
                         type="number"
                         value={shares}
+                        error={sharesError}
                         onChange={e => setShares(parseFloat(e.target.value))}
                         InputLabelProps={{
                             shrink: true,
@@ -208,8 +242,9 @@ export default function EditAssetPopOver({refetch, isActive, setIsActive, id, pr
                             ticker: ticker,
                             shares: shares
                         }
-                        await updateAsset(id, asset)
-                        deactivate()
+                        if (await updateAsset(id, asset)) {
+                            deactivate()
+                        }
                     }}>
                         <AiOutlinePlus size={16} style={{}}/>
                         <div style={{fontSize: 16}}>Save asset</div>
