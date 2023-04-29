@@ -6,7 +6,6 @@ export default function LeftSide({activePage, setActivePage, favouritesData}) {
     return(
         <div id={'leftSide'} style={{
             flex: '1 0 15%',
-            // backgroundColor: 'green',
             display: 'flex',
             flexDirection: 'column',
             boxSizing: 'border-box',

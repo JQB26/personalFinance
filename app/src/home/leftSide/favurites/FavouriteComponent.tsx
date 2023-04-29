@@ -69,7 +69,7 @@ export default function FavouriteComponent({favouriteItem}) {
             </div>
             <div style={{
                 width: '45%',
-                height: 45,
+                height: 42,
                 paddingLeft: 20,
                 paddingRight: 20,
                 borderRadius: 8,
