@@ -121,8 +121,7 @@ export default function Assets({data, refetch}) {
                                 <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Shares</TableCell>
                                 <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Current Price</TableCell>
                                 <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Total Value USD</TableCell>
-                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Total Value PLN</TableCell>
-                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>% of Port</TableCell>
+                                <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>% of Portfolio</TableCell>
                                 <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Add to favourites</TableCell>
                                 <TableCell style={{backgroundColor: Colors.BG, color: Colors.TableHeadText}}>Edit</TableCell>
                             </TableRow>
@@ -140,10 +139,9 @@ export default function Assets({data, refetch}) {
                                     <TableCell style={{color: Colors.Light}}>{asset.type}</TableCell>
                                     <TableCell style={{color: Colors.Light}}>{asset.ticker}</TableCell>
                                     <TableCell style={{color: Colors.Light}}>{asset.shares}</TableCell>
-                                    <TableCell style={{color: Colors.Light}}>0.52 $</TableCell>
-                                    <TableCell style={{color: Colors.Light}}>{(asset.shares * 0.52).toFixed(2)} $</TableCell>
-                                    <TableCell style={{color: Colors.Light}}>{asset.shares} PLN</TableCell>
-                                    <TableCell style={{color: Colors.Light}}>30%</TableCell>
+                                    <TableCell style={{color: Colors.Light}}>{asset.currentPrice?.toFixed(2)} $</TableCell>
+                                    <TableCell style={{color: Colors.Light}}>{asset.totalValueUSD?.toFixed(2)} $</TableCell>
+                                    <TableCell style={{color: Colors.Light}}>{(asset.portfolioFraction * 100)?.toFixed(2)} %</TableCell>
                                     <TableCell>{asset.is_favourite
                                         ? <AiFillStar size={24} style={{cursor: 'pointer'}} onClick={() => removeFromFavourites(asset.id)} color={'gold'} />
                                         : <AiOutlineStar size={24} style={{cursor: 'pointer'}} color={Colors.Light} onClick={() => addToFavourites(asset.id)} />}</TableCell>

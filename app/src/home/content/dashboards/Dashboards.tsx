@@ -13,8 +13,9 @@ import {
     YAxis
 } from "recharts";
 import React from "react";
+import {Colors} from "../../../shared/colors";
 
-export default function Dashboards({data}) {
+export default function Dashboards({inputData}) {
     const Item = styled(Paper)(({ theme }) => ({
         backgroundColor: '#1A2027',
         ...theme.typography.body2,
@@ -29,22 +30,30 @@ export default function Dashboards({data}) {
         flexDirection: 'row'
     }));
 
+    const data = inputData.reduce((accumulator, currentObject) => {
+        const modifiedObject = {...currentObject, totalValueUSD: Number(currentObject.totalValueUSD?.toFixed(2))}
+        accumulator.push(modifiedObject)
+        return accumulator
+    }, [])
+
+    console.log({inputData, data})
+
     // TODO: fix that code
     let groupByTypeSum = {
         Cash: 0,
         Bank: 0
     }
     data.forEach((el) => {
-        groupByTypeSum[el.type] += el.shares
+        groupByTypeSum[el.type] += (el.totalValueUSD || 0)
     })
     let dataGroupByTypeSum = [
         {
             name: 'Cash',
-            shares: groupByTypeSum.Cash
+            totalValueUSD: Number(groupByTypeSum.Cash.toFixed(2))
         },
         {
             name: 'Bank',
-            shares: groupByTypeSum.Bank
+            totalValueUSD: Number(groupByTypeSum.Bank.toFixed(2))
         }
     ]
 
@@ -55,10 +64,18 @@ export default function Dashboards({data}) {
         return group;
     }, {});
 
+    const dashboardTitleStyle = {
+        display: 'flex',
+        justifyContent: 'center',
+        color: Colors.Light,
+        fontSize: 18,
+        marginBottom: 10,
+        marginTop: 10
+    }
+
     return(
         <div style={{
             flex: '1 0 auto',
-            // backgroundColor: 'gray',
             marginTop: 30,
             marginLeft: 60,
             marginRight: 50,
@@ -67,24 +84,27 @@ export default function Dashboards({data}) {
         }}>
             <Grid container rowSpacing={1} columnSpacing={{ xs: 1, sm: 2, md: 3 }}>
                 <Grid item xs={6}>
+                    <div style={dashboardTitleStyle}>All assets by total USD value</div>
                     <Item>
                         <ResponsiveContainer width="90%" height="90%">
-                            <Treemap width={0} height={0} data={data} dataKey="shares" stroke="#fff" fill="#8884d8">
+                            <Treemap width={0} height={0} data={data} dataKey="totalValueUSD" stroke="#fff" fill="#8884d8">
                                 <Tooltip />
                             </Treemap>
                         </ResponsiveContainer>
                     </Item>
                 </Grid>
                 <Grid item xs={6}>
+                    <div style={dashboardTitleStyle}>Total USD value by grouped Type</div>
                     <Item>
                         <ResponsiveContainer width="90%" height="90%">
-                            <Treemap width={0} height={0} data={dataGroupByTypeSum} dataKey="shares" aspectRatio={4 / 3} stroke="#fff" fill="#8884d8">
+                            <Treemap width={0} height={0} data={dataGroupByTypeSum} dataKey="totalValueUSD" aspectRatio={4 / 3} stroke="#fff" fill="#8884d8">
                                 <Tooltip />
                             </Treemap>
                         </ResponsiveContainer>
                     </Item>
                 </Grid>
                 <Grid item xs={6}>
+                    <div style={dashboardTitleStyle}>All assets by total USD value</div>
                     <Item>
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart
@@ -103,12 +123,13 @@ export default function Dashboards({data}) {
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Bar dataKey="shares" fill="#8884d8" />
+                                <Bar dataKey="totalValueUSD" fill="#8884d8" />
                             </BarChart>
                         </ResponsiveContainer>
                     </Item>
                 </Grid>
                 <Grid item xs={6}>
+                    <div style={dashboardTitleStyle}>Total USD value by grouped Type</div>
                     <Item>
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart
@@ -127,12 +148,13 @@ export default function Dashboards({data}) {
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Bar dataKey="shares" fill="#8884d8" />
+                                <Bar dataKey="totalValueUSD" fill="#8884d8" />
                             </BarChart>
                         </ResponsiveContainer>
                     </Item>
                 </Grid>
                 <Grid item xs={6}>
+                    <div style={dashboardTitleStyle}>Cash assets by total USD value</div>
                     <Item>
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart
@@ -151,12 +173,13 @@ export default function Dashboards({data}) {
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Bar dataKey="shares" fill="#8884d8" />
+                                <Bar dataKey="totalValueUSD" fill="#8884d8" />
                             </BarChart>
                         </ResponsiveContainer>
                     </Item>
                 </Grid>
                 <Grid item xs={6}>
+                    <div style={dashboardTitleStyle}>Bank assets by total USD value</div>
                     <Item>
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart
@@ -175,17 +198,18 @@ export default function Dashboards({data}) {
                                 <YAxis />
                                 <Tooltip />
                                 <Legend />
-                                <Bar dataKey="shares" fill="#8884d8" />
+                                <Bar dataKey="totalValueUSD" fill="#8884d8" />
                             </BarChart>
                         </ResponsiveContainer>
                     </Item>
                 </Grid>
                 <Grid item xs={6}>
+                    <div style={dashboardTitleStyle}>All assets Pie Chart</div>
                     <Item>
                         <ResponsiveContainer width="100%" height="100%">
                             <PieChart width={500} height={500}>
                                 <Pie
-                                    dataKey="shares"
+                                    dataKey="totalValueUSD"
                                     data={data}
                                     cx="50%"
                                     cy="50%"

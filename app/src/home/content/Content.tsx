@@ -11,7 +11,7 @@ export default function Content({activePage, data, refetch}) {
             flexDirection: 'column'
         }}>
             <Header activePage={activePage} />
-            {activePage === 'dashboards' ? <Dashboards data={data} /> : <Assets data={data} refetch={refetch} />}
+            {activePage === 'dashboards' ? <Dashboards inputData={data} /> : <Assets data={data} refetch={refetch} />}
         </div>
     )
 }

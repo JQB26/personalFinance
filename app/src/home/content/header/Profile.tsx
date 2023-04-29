@@ -1,10 +1,12 @@
 import {Colors} from "../../../shared/colors";
 import {Avatar, Box, IconButton, Menu, MenuItem, Tooltip, Typography} from "@mui/material";
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {supabase} from "../../../App";
 
 export default function Profile() {
     const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(null);
+
+    const [name, setName] = useState("JS")
 
     const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorElUser(event.currentTarget);
@@ -18,6 +20,16 @@ export default function Profile() {
         await supabase.auth.signOut()
     }
 
+    useEffect(() => {
+        const run = async () => {
+            const userName = (await supabase.from('users').select('*').maybeSingle())
+                .data.name
+            setName(userName.substring(0, 2).toUpperCase())
+        }
+
+        void run()
+    }, [])
+
     return(
         <div style={{
             display: 'flex',
@@ -27,7 +39,7 @@ export default function Profile() {
             <Box sx={{ flexGrow: 0 }}>
                 <Tooltip title="Open settings">
                     <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                        <Avatar sx={{ bgcolor: Colors.Light, color: 'black', width: 64, height: 64 }}>JS</Avatar>
+                        <Avatar sx={{ bgcolor: Colors.Light, color: 'black', width: 64, height: 64 }}>{name}</Avatar>
                     </IconButton>
                 </Tooltip>
                 <Menu

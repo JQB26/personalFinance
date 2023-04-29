@@ -30,22 +30,6 @@ export default function Home() {
         return data.assets;
     }
 
-    async function addData() {
-        const { data, error } = await supabase.functions.invoke("my-assets", {
-            method: "POST",
-            body: {
-                asset: {
-                    name: "testName4",
-                    ticker: "TST4",
-                    type: "testType4",
-                    shares: 700
-                }
-            }
-        })
-        console.log(data)
-        await refetch()
-    }
-
     if (isLoading) {
         return (
             <div style={{display: 'flex', flexWrap: 'wrap', backgroundColor: Colors.BG, margin: 0, padding: 0, height: '100vh', width: '100vw', alignItems: 'center', justifyContent: 'center'}}>
